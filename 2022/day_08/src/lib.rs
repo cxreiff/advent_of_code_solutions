@@ -17,12 +17,12 @@ fn record_tree_visibility(grid: Vec<Vec<u32>>) -> HashSet<(usize, usize)> {
     let width = grid[0].len();
     let mut visibility = HashSet::new();
 
-    for i in 0..height {
+    for (i, row) in grid.iter().enumerate().take(height) {
         let mut l_to_r_max = 0;
         let mut r_to_l_max = 0;
         for j in 0..width {
-            let left = grid[i][j];
-            let right = grid[i][width - j - 1];
+            let left = row[j];
+            let right = row[width - j - 1];
             if left > l_to_r_max {
                 l_to_r_max = left;
                 visibility.insert((i, j));
@@ -65,9 +65,9 @@ fn find_longest_sightline(grid: Vec<Vec<u32>>) -> u32 {
                     break;
                 }
             }
-            for ii in (i+1)..grid.len() {
+            for row in grid.iter().skip(i+1) {
                     views.1 += 1;
-                if grid[ii][j] >= *tree_height {
+                if row[j] >= *tree_height {
                     break;
                 }
             }
@@ -78,7 +78,6 @@ fn find_longest_sightline(grid: Vec<Vec<u32>>) -> u32 {
                 }
             }
             for jj in (j + 1)..grid[i].len() {
-                "RIGHT";
                     views.3 += 1;
                 if grid[i][jj] >= *tree_height {
                     break;
