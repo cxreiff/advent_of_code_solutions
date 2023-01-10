@@ -41,17 +41,15 @@ fn simulate_rope(input: &str, knots: usize) -> usize {
                     Direction::Invalid => (),
                 };
                 let mut prev_knot = &head;
-                for (index, mut tail) in tails.iter_mut().enumerate() {
+                for mut tail in tails.iter_mut() {
                     let diff = (prev_knot.0 - tail.0, prev_knot.1 - tail.1);
                     if diff.0.abs() > 1 || diff.1.abs() > 1 {
                         tail.0 += diff.0.signum();
                         tail.1 += diff.1.signum();
-                        if index == knots - 1 {
-                            visits.insert(*tail);
-                        }
                     }
                     prev_knot = tail;
                 }
+                visits.insert(*prev_knot);
                 (head, tails, visits)
             },
         )
