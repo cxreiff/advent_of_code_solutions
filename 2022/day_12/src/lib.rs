@@ -90,7 +90,7 @@ fn walk_grid(grid: &mut Vec<Vec<Tile>>, end: (usize, usize)) {
 
 pub fn part_1(input: &str) -> String {
     let (_, mut grid) = parse_input(input).unwrap();
-    
+
     let mut end = None;
     let mut start = None;
     for (i, row) in grid.iter().enumerate() {
@@ -105,7 +105,9 @@ pub fn part_1(input: &str) -> String {
     }
 
     walk_grid(&mut grid, end.unwrap());
-    grid[start.unwrap().0][start.unwrap().1].distance.to_string()
+    grid[start.unwrap().0][start.unwrap().1]
+        .distance
+        .to_string()
 }
 
 pub fn part_2(input: &str) -> String {
@@ -125,7 +127,12 @@ pub fn part_2(input: &str) -> String {
     }
 
     walk_grid(&mut grid, end.unwrap());
-    candidates.iter().map(|&(i, j)| grid[i][j].distance).min().unwrap().to_string()
+    candidates
+        .iter()
+        .map(|&(i, j)| grid[i][j].distance)
+        .min()
+        .unwrap()
+        .to_string()
 }
 
 #[cfg(test)]
