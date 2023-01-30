@@ -9,6 +9,6 @@ fn main() {
     let input = fs::read_to_string(input_path)
         .unwrap_or_else(|_| panic!("Should have an input file at path: {}", input_path));
 
-    println!("{}", part_1(&input));
-    println!("{}", part_2(&input));
+    println!("{}", part_1(&input, 2_000_000));
+    println!("{}", part_2(&input, 4_000_000));
 }
