@@ -2,26 +2,25 @@ use std::collections::HashSet;
 
 use itertools::Itertools;
 
-fn parse_input(input: &str) -> (HashSet<(usize, usize)>, usize) {
-    input.lines().fold((HashSet::new(), 0_usize), |(mut set, mut depth), line| {
-        line.split(" -> ")
-            .flat_map(|pair| pair.split_once(','))
-            .map(|(x, y)| (x.parse::<usize>().unwrap(), y.parse::<usize>().unwrap()))
-            .inspect(|(_, y)| depth = depth.max(*y))
-            .tuple_windows()
-            .for_each(|((a_x, a_y), (b_x, b_y))| {
-                if a_x == b_x {
-                    (a_y.min(b_y)..=a_y.max(b_y)).for_each(|y_coord| {
-                        set.insert((a_x, y_coord));
-                    });
-                } else {
-                    (a_x.min(b_x)..=a_x.max(b_x)).for_each(|x_coord| {
-                        set.insert((x_coord, a_y));
-                    });
-                }
-            });
-        (set, depth)
-    })
+fn parse_input(input: &str) -> HashSet<(usize, usize)> {
+    input
+        .lines()
+        .flat_map(|line| {
+            line.split(" -> ")
+                .flat_map(|pair| pair.split_once(','))
+                .map(|(x, y)| (x.parse::<usize>().unwrap(), y.parse::<usize>().unwrap()))
+                .tuple_windows()
+                .flat_map(|((a_x, a_y), (b_x, b_y))| {
+                    let x_range = a_x.min(b_x)..=a_x.max(b_x);
+                    let y_range = a_y.min(b_y)..=a_y.max(b_y);
+                    x_range.cartesian_product(y_range)
+                })
+        })
+        .collect()
+}
+
+fn find_depth(rocks: &HashSet<(usize, usize)>) -> usize {
+    rocks.iter().max_by(|(_, a), (_, b)| a.cmp(b)).unwrap().1
 }
 
 fn drop_sand(mut impassable: HashSet<(usize, usize)>, depth: usize) -> usize {
@@ -93,14 +92,16 @@ fn drop_sand_floored(mut impassable: HashSet<(usize, usize)>, depth: usize) -> u
 }
 
 pub fn part_1(input: &str) -> String {
-    let (impassable, depth) = parse_input(input);
-    let sand_dropped = drop_sand(impassable, depth);
+    let rocks = parse_input(input);
+    let depth = find_depth(&rocks);
+    let sand_dropped = drop_sand(rocks, depth);
     sand_dropped.to_string()
 }
 
 pub fn part_2(input: &str) -> String {
-    let (impassable, depth) = parse_input(input);
-    let sand_dropped = drop_sand_floored(impassable, depth);
+    let rocks = parse_input(input);
+    let depth = find_depth(&rocks);
+    let sand_dropped = drop_sand_floored(rocks, depth);
     sand_dropped.to_string()
 }
 
