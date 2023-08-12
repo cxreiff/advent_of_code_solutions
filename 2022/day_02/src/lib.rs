@@ -1,7 +1,7 @@
 pub fn part_1(input: &str) -> String {
     input
         .lines()
-        .map(|round| (round.chars().nth(0).unwrap(), round.chars().nth(2).unwrap()))
+        .map(|round| (round.chars().next().unwrap(), round.chars().nth(2).unwrap()))
         .map(|(theirs, mine)| match theirs {
             'A' => match mine {
                 'X' => 4,
@@ -30,7 +30,7 @@ pub fn part_1(input: &str) -> String {
 pub fn part_2(input: &str) -> String {
     input
         .lines()
-        .map(|round| (round.chars().nth(0).unwrap(), round.chars().nth(2).unwrap()))
+        .map(|round| (round.chars().next().unwrap(), round.chars().nth(2).unwrap()))
         .map(|(theirs, mine)| match theirs {
             'A' => match mine {
                 'X' => 3,
